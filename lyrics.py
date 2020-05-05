@@ -12,7 +12,6 @@ def getLyrics(songSearch):
     if 'lyrics' not in searchQuery.lower():
         searchQuery += '%20lyrics'
     googleURL = "https://google.com/search?q=" + searchQuery
-    print(googleURL)
     response = requests.get(googleURL)
     soup = BeautifulSoup(response.text, 'html.parser')
     title = soup.find('span', class_="BNeawe tAd8D AP7Wnd").get_text()
