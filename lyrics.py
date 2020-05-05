@@ -34,4 +34,4 @@ if __name__ == '__main__':
     song = input("What song are you looking for lyrics too? ")
     title, artist, lyrics = getLyrics(song)
     print("{} by {}:".format(title, artist))
-    print(lyrics)
+    print("\n" + lyrics)
