@@ -21,7 +21,18 @@ def getLyrics(songSearch):
     return title, artist, lyrics
 
 if __name__ == '__main__':
+
+    logo = """
+    __               _          
+   / /   __  _______(_)_________
+  / /   / / / / ___/ / ___/ ___/
+ / /___/ /_/ / /  / / /__(__  ) 
+/_____/\__, /_/  /_/\___/____/  
+      /____/                    
+    """
+
+    print(logo)
     song = input("What song are you looking for lyrics too? ")
     title, artist, lyrics = getLyrics(song)
-    print("LYRICS TO {} BY {}:".format(title, artist))
+    print("{} BY {}:".format(title, artist))
     print("\n{}".format(lyrics))
