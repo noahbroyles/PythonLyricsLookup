@@ -26,24 +26,26 @@ def getLyrics(songSearch):
         sys.exit("Rendering isn't happening. You're screwed.")
 
     soup = BeautifulSoup(response.html.html, 'html.parser')
-    songTitle = soup.find('div', attrs={'data-attrid': 'title'}).get_text()
-    songArtist = soup.find('div', attrs={'data-attrid': 'subtitle'}).get_text().replace(', ...', '')
-    lyricDiv = [div for div in soup.find_all('div', attrs={'data-lyricid': True})][0]
-    soup = BeautifulSoup(str(lyricDiv), 'html.parser')
-    songLyrics = ''
-    lyricDivs = []
-    for div in soup.find_all('div'):
-        lyricDivs.append(div)
-    i = 0
-    while i < len(lyricDivs):
-        if '…' in lyricDivs[i].get_text():
-            # Skip this and the next one
-            i += 2
-        else:
-            for span in lyricDivs[i].findChildren('span'):
-                songLyrics += span.get_text() + "\n"
-            songLyrics += "\n\n"
-            i += 1
+    try:
+        songTitle = soup.find('div', attrs={'data-attrid': 'title'}).get_text()
+        songArtist = soup.find('div', attrs={'data-attrid': 'subtitle'}).get_text().replace(', ...', '')
+        lyricDiv = [div for div in soup.find_all('div', attrs={'data-lyricid': True})][0]
+        soup = BeautifulSoup(str(lyricDiv), 'html.parser')
+        songLyrics = ''
+        lyricDivs = soup.find_all('div')
+        i = 0
+        while i < len(lyricDivs):
+            if '…' in lyricDivs[i].get_text():
+                # Skip this and the next one
+                i += 2
+            else:
+                for span in lyricDivs[i].findChildren('span'):
+                    songLyrics += span.get_text() + "\n"
+                songLyrics += "\n\n"
+                i += 1
+    except AttributeError:
+        # This song ain't got lyrics on google
+        sys.exit("No lyrics found.")
     """/html/body/div/div[3]/div/div[3]/div/div/div/div/div[1]/div/div/div/div"""
     """/html/body/div/div[3]/div/div[3]/div/div/div/div/div[1]/div/div/div/div"""
     return songTitle, songArtist, songLyrics
