@@ -1,5 +1,5 @@
-import requests
 from bs4 import BeautifulSoup
+from requests_html import HTMLSession
 
 
 def getLyrics(songSearch):
@@ -12,15 +12,20 @@ def getLyrics(songSearch):
     if 'lyrics' not in searchQuery.lower():
         searchQuery += '%20lyrics'
     googleURL = "https://google.com/search?q=" + searchQuery
-    response = requests.get(googleURL)
-    soup = BeautifulSoup(response.text, 'html.parser')
-    title = soup.find('span', class_="BNeawe tAd8D AP7Wnd").get_text()
-    artist = soup.find_all('span', class_="BNeawe s3v9rd AP7Wnd")[-1].get_text()
-    lyrics = soup.find_all('div', class_="BNeawe tAd8D AP7Wnd")[-1].get_text()
+
+    s = HTMLSession()
+    response = s.get(googleURL)
+    response.html.render()
+
+    soup = BeautifulSoup(response.content, 'html.parser')
+    title = soup.find('div', attrs={'data-attrid': 'title'}).get_text()
+    artist = soup.find('div', attrs={'data-attrid': 'subtitle'}).get_text()
+    lyrics = [div.get_text() for div in soup.find_all('div', attrs={'data-lyricid': 'Lyricfind002-1637413'})]
+    print(soup.prettify())
     return title, artist, lyrics
 
-if __name__ == '__main__':
 
+if __name__ == '__main__':
     logo = """
     __               _          
    / /   __  _______(_)_________
@@ -31,7 +36,7 @@ if __name__ == '__main__':
     """
 
     print(logo)
-    song = input("What song are you looking for lyrics too? ")
+    song = input("What song are you looking for lyrics to? ")
     title, artist, lyrics = getLyrics(song)
     print("{} by {}:".format(title, artist))
-    print("\n" + lyrics)
+    # print("\n" + lyrics)
