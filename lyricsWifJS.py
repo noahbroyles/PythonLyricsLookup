@@ -46,8 +46,6 @@ def getLyrics(songSearch):
     except AttributeError:
         # This song ain't got lyrics on google
         sys.exit("No lyrics found.")
-    """/html/body/div/div[3]/div/div[3]/div/div/div/div/div[1]/div/div/div/div"""
-    """/html/body/div/div[3]/div/div[3]/div/div/div/div/div[1]/div/div/div/div"""
     return songTitle, songArtist, songLyrics
 
 
