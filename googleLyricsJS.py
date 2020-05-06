@@ -11,7 +11,7 @@ def getLyrics(songSearch):
             char = percents[char]
         searchQuery += char
     if 'lyrics' not in searchQuery.lower():
-        searchQuery += '%20lyrics'
+        searchQuery += '+lyrics'
     googleURL = "https://google.com/search?q=" + searchQuery
 
     s = HTMLSession()
@@ -45,7 +45,7 @@ def getLyrics(songSearch):
                 i += 1
     except AttributeError:
         # This song ain't got lyrics on google
-        sys.exit("No lyrics found.")
+        sys.exit("No lyrics found")
     return songTitle, songArtist, songLyrics
 
 
@@ -58,7 +58,6 @@ if __name__ == '__main__':
 /_____/\__, /_/  /_/\___/____/\____//____/  
       /____/                                            
     """
-
     print(logo)
     song = input("What song are you looking for lyrics to? ")
     title, artist, lyrics = getLyrics(song)
