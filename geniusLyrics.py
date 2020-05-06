@@ -46,10 +46,7 @@ if __name__ == '__main__':
     """
     print(logo)
     song = input("What song are you looking for lyrics too? ")
-    withAnno = input("Do you want annotations in your lyrics? ").lower()[0]
-    if withAnno == 'y':
-        title, artist, lyrics = getLyrics(song)
-    else:
-        title, artist, lyrics = getLyrics(song, withAnnotations=False)
+    withAnno = input("Do you want annotations in your lyrics? ").lower()
+    title, artist, lyrics = getLyrics(song, withAnnotations=True if withAnno.startswith('y') or not withAnno else False)
     print("{} by {}:".format(title, artist))
     print("\n" + lyrics)
