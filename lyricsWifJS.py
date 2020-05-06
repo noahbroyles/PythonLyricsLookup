@@ -1,9 +1,10 @@
+import sys
 from bs4 import BeautifulSoup
 from requests_html import HTMLSession
 
 
 def getLyrics(songSearch):
-    percents = {" ": "%20", "!": "%21", '"': "%22", "#": "%23", "$": "%24", "%": "%25", "&": "%26", "'": "%27", "(": "%28", ")": "%29", "*": "%2A", "+": "%2B", "`": "%60", ",": "%2C", "-": "%2D", ".": "%2E", "/": "%2F"}
+    percents = {" ": "+", "!": "%21", '"': "%22", "#": "%23", "$": "%24", "%": "%25", "&": "%26", "'": "%27", "(": "%28", ")": "%29", "*": "%2A", "+": "%2B", "`": "%60", ",": "%2C", "-": "%2D", ".": "%2E", "/": "%2F"}
     searchQuery = ""
     for char in songSearch:
         if char in percents.keys():
@@ -15,14 +16,37 @@ def getLyrics(songSearch):
 
     s = HTMLSession()
     response = s.get(googleURL)
+    before = response.html.html
     response.html.render()
+    after = response.html.html
 
-    soup = BeautifulSoup(response.content, 'html.parser')
-    title = soup.find('div', attrs={'data-attrid': 'title'}).get_text()
-    artist = soup.find('div', attrs={'data-attrid': 'subtitle'}).get_text()
-    lyrics = [div.get_text() for div in soup.find_all('div', attrs={'data-lyricid': 'Lyricfind002-1637413'})]
-    print(soup.prettify())
-    return title, artist, lyrics
+    try:
+        assert (before != after)
+    except AssertionError:
+        sys.exit("Rendering isn't happening. You're screwed.")
+
+    soup = BeautifulSoup(response.html.html, 'html.parser')
+    songTitle = soup.find('div', attrs={'data-attrid': 'title'}).get_text()
+    songArtist = soup.find('div', attrs={'data-attrid': 'subtitle'}).get_text().replace(', ...', '')
+    lyricDiv = [div for div in soup.find_all('div', attrs={'data-lyricid': True})][0]
+    soup = BeautifulSoup(str(lyricDiv), 'html.parser')
+    songLyrics = ''
+    lyricDivs = []
+    for div in soup.find_all('div'):
+        lyricDivs.append(div)
+    i = 0
+    while i < len(lyricDivs):
+        if '…' in lyricDivs[i].get_text():
+            # Skip this and the next one
+            i += 2
+        else:
+            for span in lyricDivs[i].findChildren('span'):
+                songLyrics += span.get_text() + "\n"
+            songLyrics += "\n\n"
+            i += 1
+    """/html/body/div/div[3]/div/div[3]/div/div/div/div/div[1]/div/div/div/div"""
+    """/html/body/div/div[3]/div/div[3]/div/div/div/div/div[1]/div/div/div/div"""
+    return songTitle, songArtist, songLyrics
 
 
 if __name__ == '__main__':
@@ -39,4 +63,4 @@ if __name__ == '__main__':
     song = input("What song are you looking for lyrics to? ")
     title, artist, lyrics = getLyrics(song)
     print("{} by {}:".format(title, artist))
-    # print("\n" + lyrics)
+    print("\n" + lyrics)
