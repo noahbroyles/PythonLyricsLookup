@@ -33,4 +33,3 @@ if __name__ == '__main__':
     song = input("What song are you looking for lyrics too? ")
     lyrics = getLyrics(song)
     print("\n" + lyrics)
-
