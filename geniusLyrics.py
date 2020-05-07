@@ -32,7 +32,7 @@ def getLyrics(songSearch, withAnnotations=True):
         sys.exit("No lyrics found")
 
     if not withAnnotations:
-        songLyrics = re.sub(r'\[.*?\]', '', songLyrics)
+        songLyrics = re.sub(r'(\n|^)\[.*?\]', '', songLyrics)
 
     return songTitle, songArtist, songLyrics.strip("\n\n")
 
