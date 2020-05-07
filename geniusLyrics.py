@@ -34,7 +34,7 @@ def getLyrics(songSearch, withAnnotations=True):
     if not withAnnotations:
         songLyrics = re.sub(r'\[.*?\]', '', songLyrics)
 
-    return songTitle, songArtist, songLyrics
+    return songTitle, songArtist, songLyrics.strip("\n\n")
 
 if __name__ == '__main__':
     logo = """
@@ -49,4 +49,4 @@ if __name__ == '__main__':
     withAnno = input("Do you want annotations in your lyrics? ").lower()
     title, artist, lyrics = getLyrics(song, withAnnotations=True if withAnno.startswith('y') or not withAnno else False)
     print("{} by {}:".format(title, artist))
-    print("\n" + lyrics)
+    print("\n" + lyrics + "\n")
