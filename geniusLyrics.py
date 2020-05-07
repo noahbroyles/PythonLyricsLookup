@@ -12,7 +12,7 @@ def getLyrics(songSearch, withAnnotations=True):
             char = percents[char]
         searchQuery += char
     if 'lyrics' not in searchQuery.lower():
-        searchQuery += '%20lyrics'
+        searchQuery += '+lyrics'
     searchURL = "https://google.com/search?q=" + searchQuery
     response = requests.get(searchURL)
     soup = BeautifulSoup(response.content, 'html.parser')
