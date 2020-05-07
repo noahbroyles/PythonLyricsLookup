@@ -56,10 +56,10 @@ Tomorrow, I'll wake up...
 ```
 ## What each file does:
 ### `googleLyrics.py`:
-This method of finding lyrics is the fastest. It scraps right from a Google search page and relies on some random class names. This could eventually not work anymore.
+This method of finding lyrics is the fastest. It scrapes right from a Google search page and relies on some random class names. This could eventually not work anymore, if Google decides to change their ugly class names.
 ### `googleLyricsJS.py`:
 This method of finding lyrics renders Javascript in a Google page and uses better scraping methods than `googleLyrics.py`. The only downside is that it is slower than `googleLyrics.py` because it renders Javascript and has more dependencies. It uses the [Python `requests-HTML`](https://github.com/psf/requests-html/) package, which downloads Chromium in the background the first time you use it.
-So it takes more disk space and really isn't worth all that.
+So it takes more disk space and really isn't worth all that. However, it's likely to work longer than `googleLyrics.py` will.
 ### `songlyrics.py`:
 This method of finding lyrics uses [songlyrics.com](http://www.songlyrics.com/), which is a random lyric site I found that isn't even secure. This does _not_ give the artist and title for songs that you look up, only the lyrics. **IF** it finds the song at all, which is _certainly_ debatable.
 ### `genuisLyrics.py`:
